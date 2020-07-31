@@ -8,6 +8,13 @@ env:
   DOCKER_COMPOSE_VERSION: 1.24.0
 
 before_install:
+  # Check SELinux status
+  - sudo apt-get update
+  - sudo apt-get install -y policycoreutils
+  - sestatus
+  # Check if the current cgruops v2 or v1.
+  # https://wiki.archlinux.org/index.php/cgroups
+  - ls /sys/fs/cgroup
   # update docker
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -19,6 +26,8 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker -v
+  - docker version
+  - docker info
   - docker-compose -v
 
 install:
